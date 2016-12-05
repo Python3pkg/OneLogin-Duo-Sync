@@ -620,40 +620,39 @@ class User(Token):
             return r.json()
 
 
-class Role(Token):
+class Group(Token):
     """
-    TODO: Call Role API to list, create, destory, update, and search Roles
+    TODO: Call Group API to list, create, destory, update, and search Groups
     """
 
-    def __init__(role, token):
+    def __init__(group, token):
         """
-        TODO: Initialize the Role Object
+        Initialize the Group Object
+
         :return:
         """
-        role.session = requests.session()
-        role.session.headers = {'Content-Type': 'application/json'}
-        role.roles_endpoint = '/api/1/roles'
+        group.session = requests.session()
+        group.session.headers = {'Content-Type': 'application/json'}
+        group.groups_endpoint = '/api/1/groups'
         try:
-            role.base_url = token.base_url
-            role.session.headers.update({'Authorization': 'Bearer:%s' % token.access_token})
+            group.base_url = token.base_url
+            group.session.headers.update({'Authorization': 'Bearer:%s' % token.access_token})
         except:
             raise ValueError('Token not found, have you initialized the Token yet?')
 
-    def get_roles(role, id=0, name=0):
+    def get_all_groups(group):
         """
+        Just like it says on the tin.
 
         :return:
         """
-        r = role.session.get(role.base_url + role.roles_endpoint + '?%s%s' %
-                             ('&id=' + str(id),'&name=' + str(name)))
+        r = group.session.get(group.base_url + group.groups_endpoint)
         if r.status_code != 200:
-            print role.handle_error(**{
-                'status_code':r.status_code,
+            print group.handle_error(**{
+                'status code':r.status_code,
                 'message_body':r.text,
-                'url': role.base_url +
-                       role.roles_endpoint +
-                      '?%s%s' % ('&id=' + str(id), '&name=' + str(name)),
-                'headers':role.session.headers})
+                'url':group.base_url + group.groups_endpoint,
+                'headers':group.session.headers})
             exit()
         else:
             return r.json()
