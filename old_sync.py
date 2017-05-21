@@ -10,7 +10,7 @@
 # library installed from pip.
 
 # imports needed for the OneLogin API calls
-import OneLogin
+from . import OneLogin
 import json
 
 # imports for the Duo AdminAPI calls
@@ -39,10 +39,10 @@ keys = {'client_id' : ONE_LOGIN_CLIENT_ID,
 
 
 # Print out timestamp information in case we are logging this
-print "=============================="
-print "Starting OneLogin --> Duo Sync"
-print time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime())
-print "=============================="
+print("==============================")
+print("Starting OneLogin --> Duo Sync")
+print(time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime()))
+print("==============================")
 
 # Generate the OneLogin token
 ol = OneLogin.OneLogin()
@@ -104,9 +104,9 @@ for user in duoUsers:
         duoUserList[user['username']] = { 'user_id' : user['user_id'], 'groups' : groupList }
 
 # Compare OneLogin with existing groups in Duo. Create as necessary.
-for groupName in userList.keys():
+for groupName in list(userList.keys()):
     if groupName not in duoGroupList:
-        print "creating " + str(groupName)
+        print("creating " + str(groupName))
         time.sleep(3)
         duoAPI.create_group(groupName)
 
@@ -121,10 +121,10 @@ for group in duoGroups:
 # All users and groups accounted for. Assign users to group(s)
 for groupName in userList:
     for user in userList[groupName]:
-        if user in duoUserList.keys():
+        if user in list(duoUserList.keys()):
             if groupName not in duoUserList[user]['groups']:
-                print "Adding user " + str(user) + " to group " + str(groupName)
+                print("Adding user " + str(user) + " to group " + str(groupName))
                 time.sleep(3)
                 duoAPI.add_user_group(duoUserList[user]['user_id'], duoGroupList[groupName])
         else:
-            print "User " + str(user) + " not in Duo"
+            print("User " + str(user) + " not in Duo")

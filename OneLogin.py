@@ -16,12 +16,12 @@ class OneLogin(object):
             self.base_url = 'https://oapi01-shadow01.use1.onlgn.net'
 
     def set_attributes(self, kwargs):
-        for kwarg_key, kwarg_value in kwargs.iteritems():
+        for kwarg_key, kwarg_value in kwargs.items():
             setattr(self, kwarg_key, kwarg_value)
 
     def handle_error(self, **kwargs):
         error = {}
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             error[k] = v
         return error
 
@@ -58,10 +58,10 @@ class Token(OneLogin):
         r = token.session.post(token.target + '/token', verify=False,
                                json={'grant_type':'client_credentials'})
         if r.status_code != 200:
-            print token.handle_error(**{'status_code':r.status_code,
+            print(token.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': token.target + '/token',
-                                       'headers':token.session.headers})
+                                       'headers':token.session.headers}))
             return False
         else:
             token.set_attributes({
@@ -82,10 +82,10 @@ class Token(OneLogin):
                                   'refresh_token':token.refresh_token,
                                   'access_token':token.access_token})
         if r.status_code != 200:
-            print token.handle_error(**{'status_code':r.status_code,
+            print(token.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': token.target + '/token',
-                                       'headers':token.session.headers})
+                                       'headers':token.session.headers}))
             return False
         else:
             token.set_attributes({
@@ -110,10 +110,10 @@ class Token(OneLogin):
                                   'client_secret':token.client_secret
                               })
         if r.status_code != 200:
-            print token.handle_error(**{'status_code':r.status_code,
+            print(token.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': token.target + '/revoke',
-                                       'headers':token.session.headers})
+                                       'headers':token.session.headers}))
             return False
         else:
             return True
@@ -137,10 +137,10 @@ class Token(OneLogin):
             return 'Access Token not found'
         r = token.session.get(token.base_url + '/auth/rate_limit', verify=False)
         if r.status_code != 200:
-            print token.handle_error(**{'status_code':r.status_code,
+            print(token.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': token.target + '/revoke',
-                                       'headers':token.session.headers})
+                                       'headers':token.session.headers}))
             return False
         else:
             return r
@@ -191,10 +191,10 @@ class User(Token):
                 count += 1
                 if 'shadow01' in r.json()['pagination']['next_link']:
                     events.events_endpoint = r.json()['pagination']['next_link'][38:]
-                    print "..searching....page = {0}".format(count)
+                    print("..searching....page = {0}".format(count))
                 else:
                     events.events_endpoint = r.json()['pagination']['next_link'][27:]
-                    print "..searching....page = {0}".format(count)
+                    print("..searching....page = {0}".format(count))
 
 
     def get_all_users(user, sort=False, fields=''):
@@ -219,10 +219,10 @@ class User(Token):
                 r = user.session.get(user.base_url + user.user_endpoint +
                                      '?sort=-id&fields=%s' % str(fields), verify=False)
             if r.status_code != 200:
-                print user.handle_error(**{'status_code':r.status_code,
+                print(user.handle_error(**{'status_code':r.status_code,
                                            'message_body':r.text,
                                            'url': user.base_url + user.user_endpoint,
-                                           'headers':user.session.headers})
+                                           'headers':user.session.headers}))
                 next_page == 0
                 return False
             else:
@@ -239,10 +239,10 @@ class User(Token):
         r = user.session.get(user.base_url + user.user_endpoint + '/%s' % str(id),
                              verify=False)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.target + '/token',
-                                       'headers':user.session.headers})
+                                       'headers':user.session.headers}))
             return False
         else:
             return r.json()
@@ -251,10 +251,10 @@ class User(Token):
         r = user.session.get(user.base_url + user.user_endpoint + '/%s/apps' % str(id),
                              verify=False)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.base_url + user.user_endpoint,
-                                       'headers':user.session.headers})
+                                       'headers':user.session.headers}))
             exit()
         else:
             return r.json()
@@ -263,10 +263,10 @@ class User(Token):
         r = user.session.get(user.base_url + user.user_endpoint + '/%s/roles' % str(id),
                              verify=False)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.base_url + user.user_endpoint,
-                                       'headers':user.session.headers})
+                                       'headers':user.session.headers}))
             exit()
         else:
             return r.json()
@@ -275,10 +275,10 @@ class User(Token):
         r = user.session.get(user.base_url + user.user_endpoint + '/custom_attributes',
                              verify=False)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.base_url + user.user_endpoint,
-                                       'headers':user.session.headers})
+                                       'headers':user.session.headers}))
             exit()
         else:
             return r.json()
@@ -342,10 +342,10 @@ class User(Token):
                                      str(search_terms))
 
             if r.status_code != 200:
-                print user.handle_error(**{'status_code':r.status_code,
+                print(user.handle_error(**{'status_code':r.status_code,
                                            'message_body':r.text,
                                            'url': user.base_url + user.user_endpoint,
-                                           'headers':user.session.headers})
+                                           'headers':user.session.headers}))
                 return False
             else:
                 if r.json()['pagination']['next_link'] == None:
@@ -355,10 +355,10 @@ class User(Token):
                 else:
                     if 'shadow01' in r.json()['pagination']['next_link']:
                         user.user_endpoint = r.json()['pagination']['next_link'][38:]
-                        print "..searching....page = {0}".format(count)
+                        print("..searching....page = {0}".format(count))
                     else:
                         user.user_endpoint = r.json()['pagination']['next_link'][27:]
-                        print "..searching....page = {0}".format(count)
+                        print("..searching....page = {0}".format(count))
                     response[count] = r.json()
                     count += 1
 
@@ -381,15 +381,15 @@ class User(Token):
         if 'email' not in kwargs:
             raise ValueError('email is required to create user')
         payload = {}
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             payload[k] = v
         r = user.session.post(user.base_url + user.user_endpoint, json=payload)
         if r.status_code not in (200,201):
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.base_url + user.user_endpoint,
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -413,11 +413,11 @@ class User(Token):
         }
         r = user.session.post(user.base_url + user.session_endpoint, json=payload)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.base_url + user.session_endpoint,
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -431,15 +431,15 @@ class User(Token):
         """
         payload = {}
         user.update_user_endpoint = '/api/1/users/%s' % id
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             payload[k] = v
         r = user.session.put(user.base_url + user.update_user_endpoint, json=payload)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.base_url + user.update_user_endpoint,
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -457,11 +457,11 @@ class User(Token):
         }
         r = user.session.put(user.base_url + user.add_roles_endpoint, json=payload)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.base_url + user.add_roles_endpoint,
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -479,11 +479,11 @@ class User(Token):
         }
         r = user.session.put(user.base_url + user.remove_roles_endpoint, json=payload)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.base_url + user.add_roles_endpoint,
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -503,11 +503,11 @@ class User(Token):
         }
         r = user.session.put(user.base_url + user.set_clear_password_endpoint, json=payload)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.target + '/token',
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -532,11 +532,11 @@ class User(Token):
         }
         r = user.session.put(user.base_url + user.set_clear_password_endpoint, json=payload)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.target + '/token',
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -550,15 +550,15 @@ class User(Token):
         """
         user.update_attributes_endpoint = '/api/1/users/%s/set_custom_attributes' % id
         payload = {}
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             payload[k] = v
         r = user.session.put(user.base_url + user.update_attributes_endpoint, json=payload)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.target + '/token',
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -572,11 +572,11 @@ class User(Token):
         user.log_user_out_endpoint = '/api/1/users/%s/logout' % id
         r = user.session.put(user.base_url + user.log_user_out_endpoint)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.target + '/token',
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -592,11 +592,11 @@ class User(Token):
         r = user.session.put(user.base_url + user.lock_user_endpoint,
                              json={'locked_until':locked_until})
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.target + '/token',
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -610,11 +610,11 @@ class User(Token):
         user.user_delete_endpoint = '/api/1/users/%s' % id
         r = user.session.delete(user.base_url + user.user_delete_endpoint)
         if r.status_code != 200:
-            print user.handle_error(**{'status_code':r.status_code,
+            print(user.handle_error(**{'status_code':r.status_code,
                                        'message_body':r.text,
                                        'url': user.target + '/token',
                                        'headers':user.session.headers,
-                                       'payload':payload})
+                                       'payload':payload}))
             return False
         else:
             return r.json()
@@ -648,11 +648,11 @@ class Group(Token):
         """
         r = group.session.get(group.base_url + group.groups_endpoint)
         if r.status_code != 200:
-            print group.handle_error(**{
+            print(group.handle_error(**{
                 'status code':r.status_code,
                 'message_body':r.text,
                 'url':group.base_url + group.groups_endpoint,
-                'headers':group.session.headers})
+                'headers':group.session.headers}))
             exit()
         else:
             return r.json()
